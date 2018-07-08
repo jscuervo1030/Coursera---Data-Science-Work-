@@ -30,7 +30,7 @@ mydata$Global_active_power <- as.numeric(mydata$Global_active_power)
 
 Basefechas <- mydata[(mydata$Date=="2007-02-01") | (mydata$Date=="2007-02-02"),]
 
-## With our data already selected, we can plot the required variable with a histogram . We create a 
+## With our data already selected, we can plot the required variable with a plot . We create a 
 ## date variable with all information of the date
 
 Basefechas <- transform(Basefechas, fechacompleta=as.POSIXct(paste(Date, Time)), "%d/%m/%Y %H:%M:%S")
