@@ -1,5 +1,5 @@
 ## Programming Assignment 2 - R Programming
-## Juan Sebasti·n Cuervo S·nchez - 
+## Juan Sebasti√°n Cuervo S√°nchez - 
 
 ## First Function - Make Cache Matrix
 ## The First Function builds an object of type Matrix 
@@ -62,7 +62,8 @@ cacheSolve <- function(x, ...)
   minversa
   
   ## The function requires and assumes a square matrix so solve () function does not give error
+  ## We assume 
   
   
-  
+ 
 }
