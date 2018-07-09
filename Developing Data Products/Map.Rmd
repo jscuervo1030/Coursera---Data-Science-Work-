@@ -1,0 +1,33 @@
+---
+title: "Mapa Centros de Atención a Victimas del Conflicto Armado en Colombia"
+author: "Juan Sebastian Cuervo"
+date: "9 de julio de 2018"
+output: html_document
+---
+
+
+```{r,echo=FALSE}
+
+library(leaflet)
+set.seed(2018-07-08)
+
+iconoVictimas <- makeIcon(
+  iconUrl = "https://www.ecured.cu/images/6/6b/Escudo-de-colombia.png",
+  iconWidth = 30, iconHeight =30,
+  iconAnchorX = 30, iconAnchorY = 30
+)
+
+mensajes <- c("APARTADÓ", "ARAUCA","BUENAVENTURA", "CAUCASIA","CÚCUTA", "CURUMANÍ","EL CHARCO", "EL MOLINO","LA PALMA", "MONTERÍA","OCAÑA", "PITALITO","POLICARPA", "QUIBDÓ","SAN JOSÉ DEL GUAVIARE", "SOACHA","SOLEDAD", "TAME","VALLEDUPAR")
+
+
+lat <- c(7.88,6.547,3.88,7.979,7.88,9.201,2.479,10.65,5.35,8.75,8.252,1.852,1.628,5.695,2.568,4.582,10.91,6.45,10.47)
+lng <- c(-76.6,-71.00,-77.01,-75.19,-72.49,-73.54,-78.11,-72.92,-74.39,-75.87,-73.35,-76.04,-77.46,-76.64,-72.64,-74.21,-74.79,-71.74,-73.24)
+
+centros<- data.frame(lat,lng)
+
+
+centros %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(icon= iconoVictimas, popup = mensajes)
+```
