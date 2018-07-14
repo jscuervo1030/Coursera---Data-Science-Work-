@@ -3,12 +3,16 @@
 
 ##The following instructions show the procedure done for the Course Project 
 
+## Please I refer to the Readme and the Codebook in order to explain detail info of the transformations and the
+##manipulation of the data
+
 
 ## Load required libraries for Windows usage of R ( %>% pipeline operator)
 
 library(dplyr)
-library(magrittr)
 
+## Magittr calculation package
+library(magrittr)
 
 
 ## Download data from system or from web page of Coursera
@@ -62,12 +66,15 @@ actividades <- read.table(file.path(carpetadata, "activity_labels.txt"))
 colnames(actividades) <- c("activityId", "activityLabel")
 
 ## Process for Merging the Data of people activity 
+## The merge colpases the data through the c and rbind parameters.
 
 personasact <- rbind(cbind(Trainsujetos,Trainvalores,Trainactividad),cbind(Testsujetos,Testvalores,Testactividad))
 colnames(personasact) <- c("subject", caracteris[,2],"activity")
 
 
 ## Obtain the Means and The Standard Deviation Data  
+
+## We store only this information and leave out the extra information not rquired statistics with "grepl
 
 guardarcol <- grepl("subject|activity|mean|std", colnames(personasact))
 personasact <- personasact[, guardarcol]
@@ -81,19 +88,6 @@ personasact$activity <- factor(personasact$activity, levels = actividades[,1], l
 # Columns names
 
 Colpersonasact <- colnames(personasact)
-
-# remove special characters
-Colpersonasact  <- gsub("[\\(\\)-]", "", Colpersonasact )
-
-# expand abbreviations and clean up names
-Colpersonasact  <- gsub("^f", "frequencyDomain", Colpersonasact )
-Colpersonasact  <- gsub("^t", "timeDomain", Colpersonasact )
-Colpersonasact  <- gsub("Acc", "Accelerometer", Colpersonasact )
-Colpersonasact  <- gsub("Gyro", "Gyroscope", Colpersonasact )
-Colpersonasact  <- gsub("Mag", "Magnitude", Colpersonasact )
-Colpersonasact  <- gsub("Freq", "Frequency", Colpersonasact )
-Colpersonasact  <- gsub("mean", "Mean", Colpersonasact )
-Colpersonasact  <- gsub("std", "StandardDeviation", Colpersonasact )
 
 # correct typo
 Colpersonasact  <- gsub("BodyBody", "Body", Colpersonasact)
