@@ -1,0 +1,120 @@
+---
+title: "Machine Learning Course Project"
+author: "Juan Sebastian Cuervo"
+date: "15 de julio de 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+We perform the following data analysis and cleaning with the databases and using two models the Decision Tree and Random Forest we buil our Machine Learning Algorithms 
+
+## Loading packages and data 
+
+We initially load all required data and libraries in R studio 
+
+```{r}
+## Load required libraries into RStudio 
+
+library(lattice)
+library(ggplot2)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+library(corrplot)
+library(rattle)
+
+
+## Prepare Files in Working Directory taking Coursera URL 
+
+urlTrain <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+urlTest <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+Trainarchivo <- "pml-training.csv"
+TestArchivo <- "pml-testing.csv"
+
+if (!file.exists(Trainarchivo)) 
+{
+  download.file(urlTrain, destfile=Trainarchivo, mode ="wb")
+}
+if (!file.exists(TestArchivo)) 
+{
+  download.file(urlTest, destfile=TestArchivo, mode ="wb")
+}
+
+
+## Load data in RSTudio. As there are blanks we assign them NA value 
+
+DataTrain <- read.csv("pml-training.csv",na.strings = c("","NA"))
+DataTest <- read.csv("pml-testing.csv")
+
+```
+
+## Data Cleaning 
+
+There are a great number of columns with missing values so we take them out of database
+
+```{r}
+DataTrain<- DataTrain[,!sapply(DataTrain,function(DataTrain) any(is.na(DataTrain)))]
+DataTest<- DataTest[,!sapply(DataTest,function(DataTest) any(is.na(DataTest)))]
+```
+
+
+## Data Partition into Test and Train Data sets
+
+```{r}
+set.seed(22519)
+Cortar<- createDataPartition(DataTrain$classe, p=0.70, list=F)
+DataTrainFinal <- DataTrain[Cortar, ]
+DataValidation<- DataTrain[-Cortar, ]
+```
+
+## First Machine Learning Algorithm - Decision Tree 
+
+We estimate the decision tree and calculate predictions and confusion matrix 
+
+```{r}
+
+## Model Fitting 1 - Decision Tree Model 
+
+treeModel <- rpart(classe ~ ., data=DataTrainFinal, method="class")
+fancyRpartPlot(treeModel)
+
+## Prediction - Confusion Matrix  - Decision Tree  
+
+predictionspower <- predict(treeModel, DataValidation , type = "class")
+confusionMatrix(predictionspower, DataValidation$classe)
+
+```
+
+## Second Machine Learning Algorithm - Randome Forest 
+
+We estimate the decision tree and calculate predictions and confusion matrix 
+
+```{r}
+
+## Model Fitting 2 - Random Forest
+
+RanForModel<- randomForest(classe ~. , data=DataTrainFinal)
+
+predictionpower2 <- predict(RanForModel, DataValidation, type = "class")
+confusionMatrix(predictionpower2, DataValidation$classe)
+
+## As we obtian a better fit,we calculate the out of sample error of this code
+
+outofsample <- 1- as.numeric(confusionMatrix(DataValidation$classe,predictionpower2)$overall[1])
+outofsample
+```
+
+## Bibliography
+
+Velloso, E.; Bulling, A.; Gellersen, H.; Ugulino, W.; Fuks, H. Qualitative Activity Recognition of Weight Lifting Exercises.
+Proceedings of 4th International Conference in Cooperation with SIGCHI (Augmented Human '13) .
+Stuttgart, Germany: ACM SIGCHI, 2013
+
+ 
